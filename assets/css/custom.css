@@ -1,0 +1,294 @@
+@font-face {
+    font-family: 'Amoresa';
+    src: url('../fonts/Amoresa.eot');
+    src: local('Amoresa'),
+        url('../fonts/Amoresa.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Amoresa.woff2') format('woff2'),
+        url('../fonts/Amoresa.woff') format('woff'),
+        url('../fonts/Amoresa.ttf') format('truetype');
+    /* font-weight: normal;
+    font-style: normal;
+    font-display: swap; */
+}
+
+/* Banner background styling */
+.panel.banner .content.color0 {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Banner image styling - make image cover entire div */
+.panel.banner .content.color0 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.panel.banner .content.color0 > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Apply Amoresa font to main title */
+h1.major {
+    font-family: 'Amoresa', serif;
+    font-size: 4.5em;
+    line-height: 1.5;
+    letter-spacing: 0.005em;
+    font-weight: normal;
+    margin-bottom: 0.5em;
+}
+
+/* Apply Amoresa font to section headers */
+h2.major {
+    font-family: 'Amoresa', serif;
+    font-size: 2.5em;
+    line-height: 1.5;
+    letter-spacing: 0.005em;
+    font-weight: normal;
+}
+
+/* Custom color for ceremony section */
+.panel.color1 {
+    background-color: #6784ac !important;
+}
+
+/* Custom color for reception section */
+.panel.color4 {
+    background-color: #6784ac !important;
+}
+
+/* Button styling for dark blue sections */
+.panel.color1 .button.primary.color2,
+.panel.color4 .button.primary.color2 {
+    background-color: #c7d4ec !important;
+    color: #2c3e50 !important;
+    border-color: #c7d4ec !important;
+    font-weight: 600;
+}
+
+.panel.color1 .button.primary.color2:hover,
+.panel.color4 .button.primary.color2:hover {
+    background-color: #ffffff !important;
+    color: #2c3e50 !important;
+    border-color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    h1.major {
+        font-size: 3.5em;
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 480px) {
+    h1.major {
+        font-size: 2.8em;
+        line-height: 1.25;
+        letter-spacing: 0.03em;
+    }
+}
+
+/* Wedding Countdown Timer Styles */
+.countdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.countdown-box {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.countdown-box:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.countdown-label {
+    font-size: 0.7em;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0px;
+}
+
+.countdown-number {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 1;
+}
+
+/* Ceremony Section Styles */
+.ceremony-content {
+    display: flex;
+    gap: 2em;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+/* Ceremony intro text styling - reduce gap between address and time */
+.intro.joined p {
+    margin-bottom: 0.3em;
+}
+
+.intro.joined p:last-of-type {
+    margin-bottom: 1em;
+}
+
+.ceremony-image {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.ceremony-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.ceremony-image img:hover {
+    transform: scale(1.02);
+}
+
+.ceremony-details {
+    flex: 1;
+    min-width: 280px;
+}
+
+.ceremony-details h3 {
+    margin-bottom: 1.5em;
+    color: #ffffff;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.detail-item {
+    margin-bottom: 1em;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.detail-item strong {
+    color: #ffffff;
+    margin-right: 0.5em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .ceremony-content {
+        flex-direction: column;
+        gap: 1.5em;
+    }
+    
+    .ceremony-details {
+        padding: 1.5em;
+    }
+    
+    .ceremony-image {
+        min-width: 100%;
+    }
+    
+    /* Center spotlight images on mobile while maintaining coverage */
+    .panel.spotlight .image.filtered img {
+        object-position: center center;
+    }
+}
+
+@media (max-width: 480px) {
+    .countdown-box {
+        width: 70px;
+        height: 70px;
+        gap: 10px;
+    }
+    
+    .countdown-label {
+        font-size: 0.6em;
+    }
+    
+    .countdown-number {
+        font-size: 1.5em;
+    }
+    
+    .ceremony-details {
+        padding: 1em;
+    }
+    
+    .ceremony-details h3 {
+        font-size: 1.2em;
+    }
+    
+    .detail-item {
+        padding: 0.6em;
+        font-size: 0.9em;
+    }
+    
+    /* Ensure centering on smaller mobile screens */
+    .panel.spotlight .image.filtered img {
+        object-position: center center;
+    }
+}
+
+/* Gallery image styling - show full image */
+.gallery .image img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+}
+
+.gallery.bottom .image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+}
+
+.gallery .image {
+    overflow: hidden;
+    border-radius: 4px;
+    position: relative;
+}
+
+.gallery .image:hover img {
+    transform: scale(1.05);
+}
