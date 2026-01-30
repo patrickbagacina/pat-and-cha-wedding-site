@@ -94,7 +94,8 @@
 	// Tweaks/fixes.
 
 		// Mobile: Revert to native scrolling.
-			if (browser.mobile) {
+		// Exclude iPad from mobile treatment for better scrolling experience
+			if (browser.mobile && !(browser.os == 'ios' && (screen.width >= 768 || screen.height >= 768))) {
 
 				// Disable all scroll-assist features.
 					settings.keyboardShortcuts.enabled = false;

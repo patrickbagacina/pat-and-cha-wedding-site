@@ -90,6 +90,11 @@ h2.major {
         font-size: 3.5em;
         line-height: 1.2;
     }
+
+    /* Hide action button on mobile */
+    .actions.navigate {
+        display: none !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -291,4 +296,63 @@ h2.major {
 
 .gallery .image:hover img {
     transform: scale(1.05);
+}
+
+.content.venue-info {
+    min-width: 2rem !important;
+}
+
+/* Audio Play Button Styling */
+.audio-play-button {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 1000;
+	padding: 14px 20px;
+	background: linear-gradient(135deg, #ff6b9d, #c44569);
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 600;
+	color: #ffffff;
+	box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+	transition: all 0.3s ease;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	font-family: inherit;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	pointer-events: auto;
+}
+
+.audio-play-button:hover {
+	background: linear-gradient(135deg, #ff5252, #b71c1c);
+	box-shadow: 0 6px 20px rgba(255, 107, 157, 0.6);
+	transform: translateY(-2px);
+}
+
+.audio-play-button:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 10px rgba(255, 107, 157, 0.4);
+}
+
+.audio-play-button::before {
+	content: '🎵';
+	margin-right: 8px;
+	font-size: 16px;
+	display: inline-flex;
+	align-items: center;
+}
+
+/* Mobile responsive */
+@media screen and (max-width: 768px) {
+	.audio-play-button {
+		padding: 12px 16px;
+		font-size: 12px;
+		top: 15px;
+		right: 15px;
+	}
 }

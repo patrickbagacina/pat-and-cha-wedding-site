@@ -1,3 +1,4 @@
+@import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300i,400i");
 
 /*
@@ -1594,6 +1595,15 @@ input, select, textarea {
 				font-size: 1.75rem;
 			}
 
+			input[type="submit"].icon.circle.fa-angle-down:before,
+			input[type="button"].icon.circle.fa-angle-down:before,
+			button.icon.circle.fa-angle-down:before,
+			.button.icon.circle.fa-angle-down:before {
+				position: relative;
+				top: 0.1rem;
+				font-size: 1.75rem;
+			}
+
 		input[type="submit"].fit,
 		input[type="reset"].fit,
 		input[type="button"].fit,
@@ -2194,7 +2204,7 @@ input, select, textarea {
 		}
 
 			.panel > *.color0 {
-				background-image: url("../../images/overlay.png"), linear-gradient(45deg, #697c9a 20%, #697c9a 80%, #697c9a);
+				background-image: url("../../images/overlay.png"), linear-gradient(45deg, #726193 20%, #e37b7c 60%, #ffe4b4);
 				background-size: 128px 128px, auto;
 			}
 
