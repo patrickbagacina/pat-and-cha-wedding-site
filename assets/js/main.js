@@ -498,6 +498,8 @@
 								if (breakpoints.active('<=small'))
 									return;
 
+							// Don't prevent default initially - let clicks work normally
+
 							// Clear momentum interval.
 								clearInterval(momentumIntervalId);
 
@@ -519,7 +521,7 @@
 								distance = 0;
 								direction = 0;
 
-							// Initialize velocity interval.
+							// Initialize velocity interval with longer interval for smoother touch
 								clearInterval(velocityIntervalId);
 
 								velocityIntervalId = setInterval(function() {
@@ -531,7 +533,7 @@
 									// Update previous X.
 										previousX = currentX;
 
-								}, 50);
+								}, 75); // Longer interval for smoother touch
 
 							// Pause scroll zone.
 								$wrapper.triggerHandler('---pauseScrollZone');
@@ -614,27 +616,35 @@
 								if (!dragging)
 									return;
 
-							// Prevent default touch behavior
-								event.preventDefault();
-
 							// Get touch position
 								var touch = event.originalEvent.touches[0];
+								
+							// Check if touch exists (prevent errors during touch end)
+								if (!touch) return;
 
-							// Velocity.
-								currentX = touch.clientX;
+							// Velocity with smoothing
+								var newX = touch.clientX;
+								currentX = currentX + (newX - currentX) * 0.8; // Smooth out movement
 
-							// Scroll page.
-								$document.scrollLeft(startScroll + (startX - currentX));
+							// Update distance first
+								distance = Math.abs(startX - currentX);
 
-							// Update distance.
-								distance = Math.abs(startScroll - $document.scrollLeft());
+							// Only prevent default if we're actually dragging (past threshold)
+								if (distance > settings.dragging.threshold) {
+									event.preventDefault();
+									event.stopPropagation();
+								}
+
+							// Scroll page with bounds checking
+								var newScrollLeft = startScroll + (startX - currentX);
+								newScrollLeft = Math.max(0, newScrollLeft); // Prevent negative scroll
+								
+								$document.scrollLeft(newScrollLeft);
 
 							// Distance exceeds threshold? Disable pointer events on all descendents.
-								if (!dragged
-								&&	distance > settings.dragging.threshold) {
+								if (!dragged && distance > settings.dragging.threshold) {
 
 									$wrapper.addClass('is-dragged');
-
 									dragged = true;
 
 								}
@@ -714,6 +724,12 @@
 								if (!dragging)
 									return;
 
+							// Only prevent default if we actually dragged (distance exceeds threshold)
+								if (distance > settings.dragging.threshold) {
+									event.preventDefault();
+									event.stopPropagation();
+								}
+
 							// Dragged? Re-enable pointer events on all descendents.
 								if (dragged) {
 
@@ -725,10 +741,6 @@
 
 								}
 
-							// Distance exceeds threshold? Prevent default.
-								if (distance > settings.dragging.threshold)
-									event.preventDefault();
-
 							// End drag.
 								dragging = false;
 								$wrapper.removeClass('is-dragging');
@@ -738,10 +750,10 @@
 							// Pause scroll zone.
 								$wrapper.triggerHandler('---pauseScrollZone');
 
-							// Initialize momentum interval.
-								if (settings.dragging.momentum > 0) {
+							// Initialize momentum interval with smoother settings for touch
+								if (settings.dragging.momentum > 0 && distance > settings.dragging.threshold) {
 
-									m = velocity;
+									m = velocity * 0.7; // Reduce initial momentum for smoother touch
 
 									momentumIntervalId = setInterval(function() {
 
@@ -753,17 +765,21 @@
 
 											}
 
-										// Scroll page.
-											$document.scrollLeft($document.scrollLeft() + (m * direction));
+										// Scroll page with bounds checking
+											var currentScroll = $document.scrollLeft();
+											var newScroll = currentScroll + (m * direction);
+											newScroll = Math.max(0, newScroll); // Prevent negative scroll
+											
+											$document.scrollLeft(newScroll);
 
-										// Decrease momentum.
-											m = m * settings.dragging.momentum;
+										// Decrease momentum with higher decay for smoother stopping
+											m = m * (settings.dragging.momentum * 0.95);
 
 										// Negligible momentum? Clear interval and end.
-											if (Math.abs(m) < 1)
+											if (Math.abs(m) < 0.5) // Lower threshold for smoother stopping
 												clearInterval(momentumIntervalId);
 
-									}, 15);
+									}, 20); // Slightly longer interval for smoother touch momentum
 
 								}
 
