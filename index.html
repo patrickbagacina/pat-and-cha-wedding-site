@@ -4,6 +4,13 @@
 		<title>Charlene & Patrick Wedding</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		
+		<!-- Performance optimizations -->
+		<meta name="theme-color" content="#6784ac" />
+		<link rel="preload" href="assets/css/main.css" as="style" />
+		<link rel="preload" href="assets/fonts/Amoresa.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="images/gallery/wedding_images/wedding_banner.jpg" as="image" />
+		
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="assets/css/custom.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
@@ -13,7 +20,7 @@
 			<div id="page-wrapper">
 
 				<!-- Background Audio -->
-				<audio id="backgroundAudio" loop preload="auto">
+				<audio id="backgroundAudio" loop preload="none">
 					<source src="/assets/audio/song.mp3" type="audio/mpeg">
 					Your browser does not support the audio element.
 				</audio>
@@ -30,7 +37,7 @@
 									</ul>
 								</div>
 								<div class="image span-1-75" data-position="center">
-									<img src="images/gallery/prenup/MAP00739.jpg" alt="" />
+									<img src="images/gallery/prenup/MAP00739.jpg" alt="" loading="lazy" />
 								</div>
 							</section>
 
@@ -63,7 +70,7 @@
 									</ul> -->
 								</div>
 								<div class="image filtered" data-position="top left">
-									<img src="images/gallery/prenup/MAP00571-2.jpg" alt="" />
+									<img src="images/gallery/prenup/MAP00571-2.jpg" alt="" loading="lazy" />
 								</div>
 							</section>
 
@@ -244,16 +251,16 @@
 								</div>
 								<div class="gallery bottom">
 									<div class="group span-3">
-										<a href="images/gallery/prenup/MAP00554.jpg" class="image span-3" data-position="bottom"><img src="images/gallery/prenup/MAP00554.jpg" alt="" /></a>
-										<a href="images/gallery/prenup/MAP01043.jpg" class="image span-1-5" data-position="center"><img src="images/gallery/prenup/MAP01043.jpg" alt="" /></a>
-										<a href="images/gallery/prenup/MAP00681.jpg" class="image span-1-5" data-position="bottom"><img src="images/gallery/prenup/MAP00681.jpg" alt="" /></a>
+										<a href="images/gallery/prenup/MAP00554.jpg" class="image span-3" data-position="bottom"><img src="images/gallery/prenup/MAP00554.jpg" alt="" loading="lazy" /></a>
+										<a href="images/gallery/prenup/MAP01043.jpg" class="image span-1-5" data-position="center"><img src="images/gallery/prenup/MAP01043.jpg" alt="" loading="lazy" /></a>
+										<a href="images/gallery/prenup/MAP00681.jpg" class="image span-1-5" data-position="bottom"><img src="images/gallery/prenup/MAP00681.jpg" alt="" loading="lazy" /></a>
 									</div>
-									<a href="images/gallery/prenup/MAP00423.jpg" class="image span-2-5" data-position="top"><img src="images/gallery/prenup/MAP00423.jpg" alt="" /></a>
+									<a href="images/gallery/prenup/MAP00423.jpg" class="image span-2-5" data-position="top"><img src="images/gallery/prenup/MAP00423.jpg" alt="" loading="lazy" /></a>
 									<div class="group span-4-5">
-										<a href="images/gallery/prenup/MAP00663.jpg" class="image span-3" data-position="top"><img src="images/gallery/prenup/MAP00663.jpg" alt="" /></a>
-										<a href="images/gallery/prenup/MAP00879.jpg" class="image span-1-5" data-position="center"><img src="images/gallery/prenup/MAP00879.jpg" alt="" /></a>
-										<a href="images/gallery/prenup/MAP00675.jpg" class="image span-1-5" data-position="bottom"><img src="images/gallery/prenup/MAP00675.jpg" alt="" /></a>
-										<a href="images/gallery/prenup/MAP00693.jpg" class="image span-3" data-position="top"><img src="images/gallery/prenup/MAP00693.jpg" alt="" /></a>
+										<a href="images/gallery/prenup/MAP00663.jpg" class="image span-3" data-position="top"><img src="images/gallery/prenup/MAP00663.jpg" alt="" loading="lazy" /></a>
+										<a href="images/gallery/prenup/MAP00879.jpg" class="image span-1-5" data-position="center"><img src="images/gallery/prenup/MAP00879.jpg" alt="" loading="lazy" /></a>
+										<a href="images/gallery/prenup/MAP00675.jpg" class="image span-1-5" data-position="bottom"><img src="images/gallery/prenup/MAP00675.jpg" alt="" loading="lazy" /></a>
+										<a href="images/gallery/prenup/MAP00693.jpg" class="image span-3" data-position="top"><img src="images/gallery/prenup/MAP00693.jpg" alt="" loading="lazy" /></a>
 									</div>
 								</div>
 							</section>
@@ -303,6 +310,8 @@
 				function playBackgroundAudio() {
 					const audio = document.getElementById('backgroundAudio');
 					if (audio) {
+						// Load the audio only when user wants to play
+						audio.load();
 						audio.volume = 0.3; // Set volume to 30%
 						audio.play().catch(function(error) {
 							console.log('Autoplay prevented:', error);
@@ -324,15 +333,16 @@
 
 					document.getElementById('playAudioBtn').addEventListener('click', function() {
 						const audio = document.getElementById('backgroundAudio');
+						audio.load(); // Load audio when user clicks
 						audio.play();
 						this.parentNode.remove();
 					});
 				}
 
-				// Try to play audio when page loads
+				// Try to play audio when page loads (delayed for better performance)
 				document.addEventListener('DOMContentLoaded', function() {
-					// Small delay to ensure page is fully loaded
-					setTimeout(playBackgroundAudio, 1000);
+					// Delay audio loading to prioritize page content
+					setTimeout(playBackgroundAudio, 2000);
 				});
 			</script>
 

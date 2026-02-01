@@ -1,14 +1,11 @@
 @font-face {
     font-family: 'Amoresa';
-    src: url('../fonts/Amoresa.eot');
-    src: local('Amoresa'),
-        url('../fonts/Amoresa.eot?#iefix') format('embedded-opentype'),
-        url('../fonts/Amoresa.woff2') format('woff2'),
+    src: url('../fonts/Amoresa.woff2') format('woff2'),
         url('../fonts/Amoresa.woff') format('woff'),
         url('../fonts/Amoresa.ttf') format('truetype');
-    /* font-weight: normal;
+    font-weight: normal;
     font-style: normal;
-    font-display: swap; */
+    font-display: swap;
 }
 
 /* Banner background styling */
