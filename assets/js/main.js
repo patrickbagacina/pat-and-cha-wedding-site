@@ -94,17 +94,32 @@
 	// Tweaks/fixes.
 
 		// Mobile: Revert to native scrolling.
-		// Exclude iPad from mobile treatment for better scrolling experience
-			if (browser.mobile && !(browser.os == 'ios' && (screen.width >= 768 || screen.height >= 768))) {
+		// Improved iPad detection - preserve dragging for iPad devices
+			if (browser.mobile) {
+				
+				// Check if this is an iPad (iOS device with larger screen)
+				var isIPad = browser.os == 'ios' && (
+					// Standard iPad resolutions
+					(screen.width >= 768 || screen.height >= 768) ||
+					// iPad Pro resolutions
+					(screen.width >= 1024 || screen.height >= 1024) ||
+					// Modern iPad detection via user agent
+					navigator.userAgent.match(/iPad/i) ||
+					// iPad with "desktop" user agent (iOS 13+)
+					(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+				);
+				
+				// Only disable scroll features for phones, not iPads
+				if (!isIPad) {
+					// Disable all scroll-assist features.
+						settings.keyboardShortcuts.enabled = false;
+						settings.scrollWheel.enabled = false;
+						settings.scrollZones.enabled = false;
+						settings.dragging.enabled = false;
 
-				// Disable all scroll-assist features.
-					settings.keyboardShortcuts.enabled = false;
-					settings.scrollWheel.enabled = false;
-					settings.scrollZones.enabled = false;
-					settings.dragging.enabled = false;
-
-				// Re-enable overflow on body.
-					$body.css('overflow-x', 'auto');
+					// Re-enable overflow on body.
+						$body.css('overflow-x', 'auto');
+				}
 
 			}
 
@@ -430,6 +445,14 @@
 						.on('mouseup mousemove mousedown', '.image, img', function(event) {
 							event.preventDefault();
 						})
+						
+					// Prevent touch events on images for iPad/tablet (only when dragging is enabled)
+						.on('touchstart touchmove touchend', '.image, img', function(event) {
+							// Only prevent on larger screens where dragging is enabled
+							if (!breakpoints.active('<=small') && settings.dragging.enabled) {
+								event.preventDefault();
+							}
+						})
 
 					// Prevent mouse events inside excluded elements from bubbling.
 						.on('mouseup mousemove mousedown', settings.excludeSelector, function(event) {
@@ -442,6 +465,73 @@
 								$wrapper.removeClass('is-dragging');
 								clearInterval(velocityIntervalId);
 								clearInterval(momentumIntervalId);
+
+							// Pause scroll zone.
+								$wrapper.triggerHandler('---pauseScrollZone');
+
+						})
+
+					// Prevent touch events inside excluded elements from bubbling (only when dragging is enabled)
+						.on('touchstart touchmove touchend', settings.excludeSelector, function(event) {
+
+							// Only prevent on larger screens where dragging is enabled
+							if (!breakpoints.active('<=small') && settings.dragging.enabled) {
+								// Prevent event from bubbling.
+									event.stopPropagation();
+
+								// End drag.
+									dragging = false;
+									$wrapper.removeClass('is-dragging');
+									clearInterval(velocityIntervalId);
+									clearInterval(momentumIntervalId);
+
+								// Pause scroll zone.
+									$wrapper.triggerHandler('---pauseScrollZone');
+							}
+
+						})
+
+					// Touchstart event for iPad/tablet support
+						.on('touchstart', function(event) {
+
+							// Disable on <=small.
+								if (breakpoints.active('<=small'))
+									return;
+
+							// Clear momentum interval.
+								clearInterval(momentumIntervalId);
+
+							// Stop link scroll.
+								$bodyHtml.stop();
+
+							// Start drag.
+								dragging = true;
+								$wrapper.addClass('is-dragging');
+
+							// Get touch position
+								var touch = event.originalEvent.touches[0];
+
+							// Initialize and reset vars.
+								startScroll = $document.scrollLeft();
+								startX = touch.clientX;
+								previousX = startX;
+								currentX = startX;
+								distance = 0;
+								direction = 0;
+
+							// Initialize velocity interval.
+								clearInterval(velocityIntervalId);
+
+								velocityIntervalId = setInterval(function() {
+
+									// Calculate velocity, direction.
+										velocity = Math.abs(currentX - previousX);
+										direction = (currentX > previousX ? -1 : 1);
+
+									// Update previous X.
+										previousX = currentX;
+
+								}, 50);
 
 							// Pause scroll zone.
 								$wrapper.triggerHandler('---pauseScrollZone');
@@ -517,8 +607,106 @@
 
 						})
 
+					// Touchmove event for iPad/tablet support
+						.on('touchmove', function(event) {
+
+							// Not dragging? Bail.
+								if (!dragging)
+									return;
+
+							// Prevent default touch behavior
+								event.preventDefault();
+
+							// Get touch position
+								var touch = event.originalEvent.touches[0];
+
+							// Velocity.
+								currentX = touch.clientX;
+
+							// Scroll page.
+								$document.scrollLeft(startScroll + (startX - currentX));
+
+							// Update distance.
+								distance = Math.abs(startScroll - $document.scrollLeft());
+
+							// Distance exceeds threshold? Disable pointer events on all descendents.
+								if (!dragged
+								&&	distance > settings.dragging.threshold) {
+
+									$wrapper.addClass('is-dragged');
+
+									dragged = true;
+
+								}
+
+						})
+
 					// Mouseup/mouseleave event.
 						.on('mouseup mouseleave', function(event) {
+
+							var m;
+
+							// Not dragging? Bail.
+								if (!dragging)
+									return;
+
+							// Dragged? Re-enable pointer events on all descendents.
+								if (dragged) {
+
+									setTimeout(function() {
+										$wrapper.removeClass('is-dragged');
+									}, 100);
+
+									dragged = false;
+
+								}
+
+							// Distance exceeds threshold? Prevent default.
+								if (distance > settings.dragging.threshold)
+									event.preventDefault();
+
+							// End drag.
+								dragging = false;
+								$wrapper.removeClass('is-dragging');
+								clearInterval(velocityIntervalId);
+								clearInterval(momentumIntervalId);
+
+							// Pause scroll zone.
+								$wrapper.triggerHandler('---pauseScrollZone');
+
+							// Initialize momentum interval.
+								if (settings.dragging.momentum > 0) {
+
+									m = velocity;
+
+									momentumIntervalId = setInterval(function() {
+
+										// Momentum is NaN? Bail.
+											if (isNaN(m)) {
+
+												clearInterval(momentumIntervalId);
+												return;
+
+											}
+
+										// Scroll page.
+											$document.scrollLeft($document.scrollLeft() + (m * direction));
+
+										// Decrease momentum.
+											m = m * settings.dragging.momentum;
+
+										// Negligible momentum? Clear interval and end.
+											if (Math.abs(m) < 1)
+												clearInterval(momentumIntervalId);
+
+									}, 15);
+
+								}
+
+						})
+
+					// Touchend event for iPad/tablet support
+						.on('touchend touchcancel', function(event) {
 
 							var m;
 
