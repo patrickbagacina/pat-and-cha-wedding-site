@@ -65,6 +65,7 @@ h2.major {
 /* Custom color for reception section */
 .panel.color4 {
     background-color: #6784ac !important;
+    background-image: none !important;
 }
 
 /* Button styling for dark blue sections */
