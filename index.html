@@ -264,6 +264,7 @@
 							<section class="panel color4">
 								<div class="intro">
 									<h2 class="major">Save the Date</h2>
+									<h3 class="major">April 25, 2026 ♡ 3:30 PM</h3>
 									<p>We hope to see you as we celebrate the most important day of our lives</p>
 								</div>
 								<div class="gallery bottom">
@@ -292,6 +293,18 @@
 			
 			<!-- Wedding Countdown Script -->
 			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+					document.querySelectorAll('.gallery').forEach(function(gallery) {
+						if (!gallery.querySelector('.modal')) {
+							var modal = document.createElement('div');
+							modal.className = 'modal';
+							modal.tabIndex = -1;
+							modal.innerHTML = '<div class="inner"><img src="" /></div>';
+							gallery.insertBefore(modal, gallery.firstChild);
+						}
+					});
+				});
+				
 				function updateCountdown() {
 					// Wedding date: April 25, 2026
 					const weddingDate = new Date('April 25, 2026 15:00:00').getTime();
