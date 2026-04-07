@@ -4,8 +4,8 @@ const path = require('path');
 
 async function optimizeImages() {
     const directories = [
-        'images/gallery/prenup',
-        'images/gallery/wedding_images'
+        'assets/images/gallery/prenup',
+        'assets/images/gallery/wedding_images'
     ];
 
     for (const dir of directories) {
